@@ -1,5 +1,5 @@
 <!-- Post 1 -->
-    <div id="posts">
+<div id="posts">
         <div>
             <?php
                 $images = "link_up_images/female_placeholder.png";
@@ -13,7 +13,7 @@
             <img src="<?php echo $images; ?>" style="width:75px;margin-right: 5px;border-radius:50%;" alt="">
         </div>
         <div style="width:100%">
-            <div style="font-weight:bold;color:#405d9b;">
+            <div style="font-weight:bold;color:#405d9b;font-size:20px;">
                 <?php
                     echo htmlspecialchars($one_user['first_name']) . " " . htmlspecialchars($one_user['last_name']);
 
@@ -41,19 +41,11 @@
             <?php
                 if(file_exists($row['image'])) {
                     $post_image = $image_class->get_thumb_posts($row['image']);
-                    echo "<img src='$post_image' style='width:100%'/>";
+                    echo "<img src='$post_image' style='width:75%;'/>";
                 }
             ?>
 
             <br /><br />
-            <a href="">Like</a> . <a href="">comment</a> . <span style="color:#999;"><?php echo htmlspecialchars($row['date']);?></span>
-            <span style="color:#999;float:right;">
-                <?php
-                    $myPost = new Post();
-                    if($myPost->myPosts($row['postid'], $_SESSION['linkup_userid'])) {
-                        echo "<a href='edit.php'>Edit</a> . <a href='delete.php?postid=$row[postid]'>Delete</a>";
-                    }
-               ?>
-            </span>
+            
         </div>
-    </div>
+</div>

@@ -12,16 +12,21 @@ class Login {
 
         if($result) {
             $row = $result[0];
-            if($password == $row['pass_word']) {
+            if($this->hashInput($password) == $row['pass_word']) {
                 //Create session data
                 $_SESSION['linkup_userid'] = $row['userid'];
             } else {
-                $this->error .= "Wrong password <br>";
+                $this->error .= "Wrong email or password<br>";
             }
         }else {
-            $this->error .= "No such email was found <br>";
+            $this->error .= "Wrong email or password<br>";
         }
         return $this->error;
+    }
+
+    private function hashInput($input) {
+        $input = hash("md5", $input);
+        return $input;
     }
 
     public function check_login($userid) {

@@ -32,6 +32,7 @@ class Post {
                     //create folder
                     if (!file_exists($folder)) {
                         mkdir($folder, 0777, true);
+                        file_put_contents($folder . "index.php", "");
                     }
 
                     //create a new class
@@ -83,6 +84,47 @@ class Post {
         } else {
             return false;
         }
+    }
+
+    public function get_one_post($postid) {
+        if(!is_numeric($postid)) {
+            return false;
+        }
+        $sql = "SELECT * FROM posts WHERE postid = '$postid' LIMIT 1";
+        $DB = new Database();
+        $result = $DB->select($sql);
+        if($result) {
+            return $result[0];
+        } else {
+            return false;
+        }
+    }
+
+    //Function to delete a single post
+    public function deletePost($postid) {
+        if(!is_numeric($postid)) {
+            return false;
+        }
+        $sql = "DELETE FROM posts WHERE postid = '$postid' LIMIT 1";
+        $DB = new Database();
+        $DB->insert($sql);
+    }
+
+    //Funtion to uniquely determine login user posts
+    public function myPosts($postid, $sessionUserid) {
+        if(!is_numeric($postid)) {
+            return false;
+        }
+        $sql = "SELECT * FROM posts WHERE postid = '$postid' LIMIT 1";
+        $DB = new Database();
+        $result = $DB->select($sql);
+
+        if(is_array($result)) {
+            if($result[0]['userid'] == $sessionUserid){
+                return true;
+            }
+        }
+        return false;
     }
 }
 ?>
