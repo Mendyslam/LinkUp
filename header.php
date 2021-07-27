@@ -1,8 +1,15 @@
 <?php
 $corner_image = "link_up_images/female-placeholder.png";
-if(isset($user_data)) {
-    $image_class = new Image();
-    $corner_image = $image_class->get_thumb_profile($user_data['profile_image']);
+if(isset($USER)) {
+    //Check if profile picture exists
+    if(file_exists($USER['profile_image'])) {
+        $image_class = new Image();
+        $corner_image = $image_class->get_thumb_profile($USER['profile_image']);
+    } else {
+        if($USER['gender'] == "Male") {
+            $corner_image = "link_up_images/male_placeholder.png";
+        }
+    }
 }
 ?>
 

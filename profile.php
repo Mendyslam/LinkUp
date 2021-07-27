@@ -5,6 +5,8 @@ require('classes/classes.php');
 $login = new Login();
 $user_data = $login->check_login($_SESSION['linkup_userid']);
 
+$USER = $user_data;
+
 if(isset($_GET['userid'])  && is_numeric($_GET['userid'])) {
     $profile = new Profile();
     $profile_data = $profile->get_profile($_GET['userid']);
