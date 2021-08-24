@@ -46,14 +46,89 @@
             ?>
 
             <br /><br />
-            <a href="">Like</a> . <a href="">comment</a> . <span style="color:#999;"><?php echo htmlspecialchars($row['date']);?></span>
+            <?php
+                $likes = "";
+
+                $likes = $row['likes'] > 0 ? "(".$row['likes'].")" : "" ;
+            ?>
+            <a href="like.php?type=post&id=<?php echo $row['postid']; ?>">Like<?php echo $likes; ?></a> . <a href="">comment</a> . <span style="color:#999;"><?php echo htmlspecialchars($row['date']);?></span>
             <span style="color:#999;float:right;">
                 <?php
                     $myPost = new Post();
                     if($myPost->myPosts($row['postid'], $_SESSION['linkup_userid'])) {
-                        echo "<a href='edit.php'>Edit</a> . <a href='delete.php?postid=$row[postid]'>Delete</a>";
+                        echo "<a href='edit.php?postid=$row[postid]'>Edit</a> . <a href='delete.php?postid=$row[postid]'>Delete</a>";
                     }
                ?>
             </span>
+            <?php
+
+                $iLiked = false;
+
+                if(isset($_SESSION['linkup_userid'])) {
+
+                    $DB = new Database();
+                    
+                //Show who liked the post
+                    $sql = "SELECT likes FROM likes WHERE `type` ='post' && contentid='$row[postid]' LIMIT 1";
+                    
+                    $result = $DB->select($sql);
+
+                    if (is_array($result)) {
+                        //Convert to an array
+                        $likes = json_decode($result[0]['likes'], true);
+                        //extract userids
+                        $userIds = array_column($likes, 'userid');
+
+                        if (in_array($_SESSION['linkup_userid'], $userIds)) {
+                            $iLiked = true;
+                        }
+                    }
+
+                }
+
+
+                if($row['likes'] > 0 ) {
+
+                    echo "<br>";
+
+                    echo "<a href='peoplewholiked.php?type=post&postid=$row[postid]'>";
+
+                    if($row['likes'] == 1) {
+
+                        if($iLiked) {
+
+                            echo "<span style='text-align:left;'> You liked this post </span>";
+
+                        } else {
+
+                            echo "<span style='text-align:left;'> 1 person liked this post </span>";
+
+                        }
+
+                    } else {
+
+                        if($iLiked) {
+
+                            $text = "people";
+
+                            if(($row['likes'] - 1) == 1) {
+
+                                $text = "person";
+
+                            }
+                            
+                            echo "<span style='text-align:left;'> You and " . ($row['likes'] - 1) . " $text liked this post </span>";
+
+                        } else {
+
+                            echo "<span style='text-align:left;'> You and " . $row['likes'] . " {$text} liked this post </span>";
+
+                        }
+                        
+                    }
+
+                    echo "</a>";
+                }
+            ?>
         </div>
     </div>

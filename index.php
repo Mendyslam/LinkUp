@@ -3,7 +3,11 @@ require('classes/classes.php');
 
 //Check login
 $login = new Login();
+
 $user_data = $login->check_login($_SESSION['linkup_userid']);
+
+$USER = $user_data;
+
 ?>
 
 <!DOCTYPE html>
@@ -12,9 +16,8 @@ $user_data = $login->check_login($_SESSION['linkup_userid']);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile | LinkUp</title>
-</head>
-<style>
+    <title>Timeline | LinkUp</title>
+    <style>
     #profile_bar {
         /* margin-top: 15px; */
         height: 50px;
@@ -102,6 +105,7 @@ $user_data = $login->check_login($_SESSION['linkup_userid']);
     }
 
 </style>
+</head>
 <body style="font-family:tahoma; background-color: #d0d8e4;">
 <!-- Profile Bar -->
     <br />
@@ -169,7 +173,7 @@ $user_data = $login->check_login($_SESSION['linkup_userid']);
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>  
     </div>
 </body>
 </html>

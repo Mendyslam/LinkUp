@@ -6,6 +6,9 @@
                 if($one_user['gender'] == 'Male') {
                     $images = "link_up_images/male_placeholder.png";
                 }
+
+                $image_class = new Image();
+
                 if(file_exists($one_user['profile_image'])) {
                     $images = $image_class->get_thumb_profile($one_user['profile_image']);
                 }

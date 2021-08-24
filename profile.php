@@ -17,9 +17,13 @@ if(isset($_GET['userid'])  && is_numeric($_GET['userid'])) {
 }
 //For Posting
 if($_SERVER['REQUEST_METHOD'] == "POST") {
+
     $post = new Post();
+
     $userid = $_SESSION['linkup_userid'];
+
     $result = $post->create_post($userid, $_POST, $_FILES);
+
     if($result == "") {
         header('Location: profile.php');
         die;
@@ -121,6 +125,8 @@ $image_class = new Image();
         color: white;
         font-size: 14px;
         margin-right: 5px;
+        min-width: 50px;
+        cursor: pointer;
     }
     #post_area {
         margin-top: 20px;
@@ -148,7 +154,8 @@ $image_class = new Image();
                         $cover_image = $image_class->get_thumb_cover($user_data['cover_image']);
                     }
                 ?>
-                <img src="<?php echo $cover_image; ?>" alt="" style=width:100%><br />
+                <img src="<?php echo $cover_image; ?>" alt="" style=width:100%><br /><br />
+
                 <span style="font-size:11px;">
                     <?php
                         $image = "link_up_images/female-placeholder.png";
@@ -164,63 +171,63 @@ $image_class = new Image();
                     <a href="change_image.php?change=cover" style="text-decoration:none;color:#f0f;">Change Cover Image</a>
                 </span>
                 <br />
-                <div style="font-size:20px;text-align:center;"><?php echo $user_data['first_name']. " " . $user_data['last_name']; ?></div>
-                <br />
-                <a href="index.php"><button class='menus'>Timeline</button></a>
-                <button class='menus'>About</button>
-                <button class='menus'>Friends</button>
-                <button class='menus'>Photos</button>
-                <button class='menus'>Settings</button>
-            </div>
-            <!-- Friends and post area -->
-            <div style="display:flex;">
-            <!-- Friends -->
-                <div style="flex:1;min-height:400px;">
-                    <div id="friends_area">
-                        Friends<br />
-                        <?php
-                            if($friends) {
-                                foreach($friends as $friend) {
-                                    // print_r($row)."<br>";
-                                    // print_r($one_user);
-
-                                    include("user.php");
-                                }
-                            }
+                    <div style="font-size:20px;text-align:center;"><a href="profile.php?id=<?php echo $user_data['userid']?>" style='text-decoration:none;'><?php echo $user_data['first_name']. " " . $user_data['last_name']; ?><br /></a>
                             
-                        ?>
-                    </div>
-                </div>
-                <!-- Post area -->
-                <div style="flex:2.5;min-height:400px;padding: 20px;padding-right: 0px;">
-                    <div style="border: none; paddding: 10px;background-color:white;">
-                    
-                        <form action="" method='post' enctype="multipart/form-data">
-                            <textarea name="post" placeholder="Whats on your mind?"></textarea><br />
-                            <input type="file" name="file">
-                            <input type="submit" id="post" value="post"><br />
-                        <br />
-                        </form>
-                    </div>
-                    <!-- Post views -->
-                    <div id="post_area">
                         <?php
-                            if($posts) {
-                                foreach($posts as $row) {
-                                    // print_r($row)."<br>";
-                                    $user = new User();
-                                    $one_user = $user->get_user($row['userid']);
-                                    // print_r($one_user);
+                            $mylikes = "";
 
-                                    include("post.php");
-                                }
+                            if($user_data['likes'] > 0) {
+
+                                $mylikes = " (" . $user_data['likes'] . "Followers)";
+
                             }
-                            
                         ?>
                         
+                        <a href="like.php?type=user&id=<?php echo $user_data['userid']?>">
+                        
+                            <input type="button" id="post" value="Follow<?php echo $mylikes; ?>" style="background-color:#9b409a;width:auto;">
+                        
+                        </a>
+
                     </div>
-                </div>
+                <br />
+                <a href="index.php"><button class='menus'>Timeline</button></a>
+                <a href="profile.php?section=about&id=<?php echo $user_data['userid']?>"><button class='menus'>About</button></a>
+                <a href="profile.php?section=followers&id=<?php echo $user_data['userid']?>"><button class='menus'>Followers</button></a>
+                <a href="profile.php?section=following&id=<?php echo $user_data['userid']?>"><button class='menus'>Following</button></a>
+                <a href="profile.php?section=photos&id=<?php echo $user_data['userid']?>"><button class='menus'>Photos</button></a>
+                <a href="profile.php?section=settings"><button class='menus'>Settings</button></a>
             </div>
+            <!-- Friends and post area -->
+            <?php
+                $section = "default";
+
+                if(isset($_GET['section'])) {
+
+                    $section = $_GET['section'];
+
+                }
+
+                if($section == "default") {
+
+                    include('profile_default.php');
+
+                }elseif($section == "photos") {
+
+                    include('profile_photos.php');
+
+                }elseif($section == "followers") {
+
+                    include('profile_followers.php');
+
+                }elseif($section == "following") {
+
+                    include('profile_following.php');
+
+                }
+                
+            ?>
+            
     </div>
 </body>
 </html>

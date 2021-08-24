@@ -9,6 +9,7 @@
             $images = $image_class->get_thumb_profile($friend['profile_image']);
         }
     ?>
+    
     <a href="profile.php?userid=<?php echo $friend['userid']; ?>" style="text-decoration:none;">
         <img class="friends_image"src="<?php echo $images; ?>" alt="" style="border-radius:50%;"><br />
         <?php echo $friend['first_name']." ".$friend['last_name'];?>
